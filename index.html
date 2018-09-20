@@ -1,0 +1,1145 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>A whirlwind tour of working with data in R</title>
+    <meta charset="utf-8">
+    <meta name="author" content="Paul Campbell Culture of Insight" />
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/metropolis.css" rel="stylesheet" />
+    <link href="libs/remark-css/metropolis-fonts.css" rel="stylesheet" />
+    <link rel="stylesheet" href="my_styles.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# A whirlwind tour of working with data in R
+### Paul Campbell<br>Culture of Insight
+### <br>September 2018
+
+---
+
+
+
+
+class: inverse, middle, center
+
+# Why R?
+
+---
+
+# R
+
+.pull-left[
+
+- R is a programming language built for data analysis and visualisation
+
+- It's 'open-source' which means it is completely free to use
+
+- Developed and maintained by an active not-for-profit team of software engineers and developers
+
+- This means it is always growing and improving with over 11,000 R 'packages' freely available to use
+
+- Highly flexible - adapt to suit your own needs without the constraints of proprietary software
+
+- Community - welcoming community of R users online (#rstats) always happy to help and make it fun for you to learn
+
+]
+
+.pull-right[
+![R logo](https://www.r-project.org/logo/Rlogo.png)
+]
+---
+
+# R vs Excel
+
+.pull-left[
+
+But I'm already an Excel wizard, why do I need R?
+
+- As the importance and abundance of data increases, so does the complexity of the data tasks we're asked to fulfill
+
+- Doing complex tasks with large data volumes in Excel is...Difficult!
+
+- Learning to programme these tasks with R will:
+  * reduce human error
+  * allow you to work with larger datasets
+  * make your analysis more transparent and reproducible
+  * automate the boring repetitive parts
+  * save you **so much time**
+
+]
+
+.pull-right[
+![r v excel](http://revolution-computing.typepad.com/.a/6a010534b1db25970b01bb097c37a7970d-pi)
+Source: [Gordon Shotwell](https://blog.shotwell.ca/2017/02/02/r-for-excel-users/)
+]
+
+???
+
+Excel has long been the industry-standard tool for working with data but it's limitations are becoming more and more apparent as data volumes increase as well as the demand for accuracy and reproducibility in data analysis
+
+---
+
+# R vs Python
+
+But isn't python the best for this type of stuff?
+
+.pull-left[
+
+- Python is also a great language for data analysis, but it's scope extends way beyond this and is generally better suited to people with computer science backgrounds
+
+- If you're interested in learning to code with the end goal of harnessing AI and deploying machine learning models in large-scale production environments - choose python!
+
+- If your primary objective is to get better at manipulating and visualisation data, and communicating the results in reports and interactive dashboards - R is your new best friend (examples to come)
+
+]
+
+.pull-right[
+![r v python](https://pbs.twimg.com/media/DmXkYhfXgAAfoD8.jpg:large)
+]
+
+---
+
+class: inverse, middle, center
+
+# The R Workflow
+
+![r4ds](http://r4ds.had.co.nz/diagrams/data-science.png)
+
+Source: [R for Data Science](http://r4ds.had.co.nz)
+
+---
+
+class: inverse, middle, center
+
+# Importing
+
+---
+
+# Importing Data
+
+.pull-left[
+
+R can import data in just about every form imaginable:
+
+- Flat files like plain text and delimited data: .txt, .csv, .tsv
+
+- Data files from proprietary software like MS Excel, SPSS, SAS
+
+- Directly from Databases: MySQL, MS SQL Server, PostgreSQL
+
+- Directly from the Web: APIs, JSON, Webscrape HTML
+
+]
+
+.pull-right[
+![r data imports](http://www.sthda.com/sthda/RDoc/images/importing-data-into-r.png)
+]
+
+---
+
+# Importing Data - CSV
+
+
+```r
+library(tidyverse) # load full suite of packages for data analysis
+
+london_crime &lt;- read_csv("data/london_crime.csv") # import london violent crime data
+
+london_crime # preview the data
+```
+
+```
+## # A tibble: 32 x 19
+##    Code    Borough       `1999-00` `2000-01` `2001-02` `2002-03` `2003-04`
+##    &lt;chr&gt;   &lt;chr&gt;             &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+##  1 E09000~ Barking and ~      19.8      22.0      23.8      26.4      29.5
+##  2 E09000~ Barnet             13.5      14.5      15.2      16.4      18.1
+##  3 E09000~ Bexley             14.5      14.7      15.3      16.2      18.4
+##  4 E09000~ Brent              20.8      21.8      21.1      23.3      27.5
+##  5 E09000~ Bromley            10.9      12.9      13.0      15.9      16.8
+##  6 E09000~ Camden             28.1      27.2      27.0      28.5      31.4
+##  7 E09000~ Croydon            17.7      18.9      18.5      22.8      23.6
+##  8 E09000~ Ealing             22.0      21.1      22.3      23.1      23.2
+##  9 E09000~ Enfield            14.8      17.4      18.3      19.9      18.2
+## 10 E09000~ Greenwich          29.4      29.4      28.8      31.1      30.6
+## # ... with 22 more rows, and 12 more variables: `2004-05` &lt;dbl&gt;,
+## #   `2005-06` &lt;dbl&gt;, `2006-07` &lt;dbl&gt;, `2007-08` &lt;dbl&gt;, `2008-09` &lt;dbl&gt;,
+## #   `2009-10` &lt;dbl&gt;, `2010-11` &lt;dbl&gt;, `2011-12` &lt;dbl&gt;, `2012-13` &lt;dbl&gt;,
+## #   `2013-14` &lt;dbl&gt;, `2014-15` &lt;dbl&gt;, `2015-16` &lt;dbl&gt;
+```
+
+---
+
+# Importing Data - Multiple Excel Sheets to 1 Data Frame
+
+&lt;iframe width="100%" height = "500px" src="https://view.officeapps.live.com/op/view.aspx?src=https%3A%2F%2Fwww.cultureofinsight.com%2Fdata%2Fgapminder_messy.xlsx" scrolling="yes" frameborder="no"&gt;&lt;/iframe&gt;
+
+---
+
+# Importing Data - Multiple Excel Sheets to 1 Data Frame
+
+.pull-left[
+
+```r
+library(readxl)
+
+path &lt;- "data/gapminder_messy.xlsx"
+
+combined_data &lt;- excel_sheets(path) %&gt;% 
+  map_df(~ {
+    read_excel(path, sheet = .x, 
+               skip = 4, trim_ws = TRUE) %&gt;% 
+      mutate(year = as.numeric(.x))
+  }) %&gt;% 
+  select(country, year, everything())
+
+# show top and bottom 6 rows of data frame
+head(combined_data)
+tail(combined_data)
+```
+]
+
+.pull-right[
+
+```
+## # A tibble: 6 x 5
+##   country      year gdpPercap lifeExp      pop
+##   &lt;chr&gt;       &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;
+## 1 Afghanistan  2007       975    43.8 31889923
+## 2 Albania      2007      5937    76.4  3600523
+## 3 Algeria      2007      6223    72.3 33333216
+## 4 Angola       2007      4797    42.7 12420476
+## 5 Argentina    2007     12779    75.3 40301927
+## 6 Australia    2007     34435    81.2 20434176
+```
+
+```
+## # A tibble: 6 x 5
+##   country             year gdpPercap lifeExp      pop
+##   &lt;chr&gt;              &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;
+## 1 Venezuela           1952      7690    55.1  5439568
+## 2 Vietnam             1952       605    40.4 26246839
+## 3 West Bank and Gaza  1952      1516    43.2  1030585
+## 4 Yemen, Rep.         1952       782    32.5  4963829
+## 5 Zambia              1952      1147    42.0  2672000
+## 6 Zimbabwe            1952       407    48.5  3080907
+```
+]
+
+---
+
+# Importing Data - SPSS
+
+You don't have to pay expensive SPSS licenses to analyse your survey data!
+
+
+```r
+library(haven) # for reading SPSS, SAS, STATA files
+
+survey_data &lt;- read_sav("data/sample_spss_data.sav")
+
+head(survey_data)
+```
+
+```
+## # A tibble: 6 x 682
+##   SubsID  responseid respid dCOUNTRY fQ1bGender foQ1aAge_1 dAge   Q2Kids_1
+##   &lt;chr&gt;        &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl+lb&gt; &lt;dbl+lbl&gt;       &lt;dbl&gt; &lt;dbl+&gt;    &lt;dbl&gt;
+## 1 218884~        345    347 1        1                68.0 3          2.00
+## 2 235864~        185    187 1        1                51.0 2          2.00
+## 3 237393~        108    110 1        2                57.0 3          2.00
+## 4 250156~        524    526 1        2                53.0 2          2.00
+## 5 254053~        349    351 1        2                25.0 1          2.00
+## 6 200042~        823    825 1        2                54.0 2          1.00
+## # ... with 674 more variables: Q2Kids_2 &lt;dbl&gt;, Q2Kids_3 &lt;dbl&gt;,
+## #   dKIDS &lt;dbl+lbl&gt;, Q3 &lt;dbl+lbl&gt;, dNET &lt;dbl+lbl&gt;, fQ2UKRegion &lt;dbl+lbl&gt;,
+## #   dRegionUK &lt;dbl+lbl&gt;, fQ2FRRegion &lt;dbl+lbl&gt;, dRegionFR &lt;dbl+lbl&gt;,
+## #   fQ2DERegion &lt;dbl+lbl&gt;, dRegionDE &lt;dbl+lbl&gt;, Q2TURRegion &lt;dbl+lbl&gt;,
+## #   Q2IncomeUK &lt;dbl+lbl&gt;, dIncomeUK &lt;dbl+lbl&gt;, Q2IncomeFR &lt;dbl+lbl&gt;,
+## #   dIncomeFR &lt;dbl+lbl&gt;, Q2IncomeDE &lt;dbl+lbl&gt;, dIncomeDE &lt;dbl+lbl&gt;,
+## #   Q2IncomeTUR &lt;dbl+lbl&gt;, dIncomeTUR &lt;dbl+lbl&gt;, Q4_1 &lt;dbl+lbl&gt;,
+## #   Q4_2 &lt;dbl+lbl&gt;, Q4_3 &lt;dbl+lbl&gt;, Q4_4 &lt;dbl+lbl&gt;, Q4_5 &lt;dbl+lbl&gt;,
+## #   Q4_6 &lt;dbl+lbl&gt;, Q4_99 &lt;dbl+lbl&gt;, Q6_1 &lt;dbl+lbl&gt;, Q6_2 &lt;dbl+lbl&gt;,
+## #   Q6_3 &lt;dbl+lbl&gt;, Q6_4 &lt;dbl+lbl&gt;, Q6_5 &lt;dbl+lbl&gt;, Q6_98 &lt;dbl+lbl&gt;,
+## #   Q6_99 &lt;dbl+lbl&gt;, dBiscLMAll_1 &lt;dbl+lbl&gt;, dBiscLMAll_2 &lt;dbl+lbl&gt;,
+## #   dBiscLMAll_3 &lt;dbl+lbl&gt;, dBiscLMAll_4 &lt;dbl+lbl&gt;,
+## #   dBiscLMAll_5 &lt;dbl+lbl&gt;, dBiscLMAll_6 &lt;dbl+lbl&gt;, dTypLMAll_1 &lt;dbl+lbl&gt;,
+## #   dTypLMAll_2 &lt;dbl+lbl&gt;, dTypLMAll_3 &lt;dbl+lbl&gt;, dTypLMAll_4 &lt;dbl+lbl&gt;,
+## #   dNumber &lt;dbl+lbl&gt;, fQ13_1 &lt;dbl+lbl&gt;, fQ13_2 &lt;dbl+lbl&gt;,
+## #   fQ13_3 &lt;dbl+lbl&gt;, fQ13_4 &lt;dbl+lbl&gt;, fQ13_5 &lt;dbl+lbl&gt;,
+## #   fQ13_6 &lt;dbl+lbl&gt;, fQ13_7 &lt;dbl+lbl&gt;, fQ13_8 &lt;dbl+lbl&gt;,
+## #   fQ13_9 &lt;dbl+lbl&gt;, fQ13_10 &lt;dbl+lbl&gt;, fQ13_11 &lt;dbl+lbl&gt;,
+## #   fQ13_12 &lt;dbl+lbl&gt;, fQ13_13 &lt;dbl+lbl&gt;, fQ13_14 &lt;dbl+lbl&gt;,
+## #   fQ13_15 &lt;dbl+lbl&gt;, fQ13_16 &lt;dbl+lbl&gt;, fQ13_17 &lt;dbl+lbl&gt;,
+## #   fQ13_18 &lt;dbl+lbl&gt;, fQ13_19 &lt;dbl+lbl&gt;, fQ13_20 &lt;dbl+lbl&gt;,
+## #   fQ13_21 &lt;dbl+lbl&gt;, fQ13_22 &lt;dbl+lbl&gt;, fQ13_23 &lt;dbl+lbl&gt;,
+## #   fQ13_24 &lt;dbl+lbl&gt;, fQ13_25 &lt;dbl+lbl&gt;, fQ13_26 &lt;dbl+lbl&gt;,
+## #   fQ13_27 &lt;dbl+lbl&gt;, fQ13_28 &lt;dbl+lbl&gt;, fQ13_29 &lt;dbl+lbl&gt;,
+## #   fQ13_30 &lt;dbl+lbl&gt;, fQ13_31 &lt;dbl+lbl&gt;, fQ13_32 &lt;dbl+lbl&gt;,
+## #   fQ13_33 &lt;dbl+lbl&gt;, fQ13_34 &lt;dbl+lbl&gt;, fQ13_35 &lt;dbl+lbl&gt;,
+## #   fQ13_36 &lt;dbl+lbl&gt;, fQ13_37 &lt;dbl+lbl&gt;, fQ13_38 &lt;dbl+lbl&gt;,
+## #   Q25A_1 &lt;dbl+lbl&gt;, Q25A_2 &lt;dbl+lbl&gt;, Q25A_3 &lt;dbl+lbl&gt;,
+## #   Q25A_4 &lt;dbl+lbl&gt;, Q25A_5 &lt;dbl+lbl&gt;, Q25A_6 &lt;dbl+lbl&gt;,
+## #   Q25A_7 &lt;dbl+lbl&gt;, Q25A_8 &lt;dbl+lbl&gt;, Q25A_9 &lt;dbl+lbl&gt;,
+## #   Q25A_10 &lt;dbl+lbl&gt;, Q25A_11 &lt;dbl+lbl&gt;, Q25A_12 &lt;dbl+lbl&gt;,
+## #   Q25A_13 &lt;dbl+lbl&gt;, Q25A_14 &lt;dbl+lbl&gt;, Q25A_15 &lt;dbl+lbl&gt;,
+## #   Q25A_16 &lt;dbl+lbl&gt;, Q25A_95 &lt;dbl+lbl&gt;, ...
+```
+
+---
+
+# Importing Data - SPSS
+
+
+```r
+# convert spss label codes into labels
+labelled_survey_data &lt;- as_factor(survey_data)
+
+head(labelled_survey_data)
+```
+
+```
+## # A tibble: 6 x 682
+##   SubsID   responseid respid dCOUNTRY fQ1bGender foQ1aAge_1 dAge  Q2Kids_1
+##   &lt;chr&gt;         &lt;dbl&gt;  &lt;dbl&gt; &lt;fct&gt;    &lt;fct&gt;           &lt;dbl&gt; &lt;fct&gt;    &lt;dbl&gt;
+## 1 21888465        345    347 UK       Male             68.0 55+       2.00
+## 2 23586407        185    187 UK       Male             51.0 35-54     2.00
+## 3 23739306        108    110 UK       Female           57.0 55+       2.00
+## 4 25015655        524    526 UK       Female           53.0 35-54     2.00
+## 5 25405304        349    351 UK       Female           25.0 16-34     2.00
+## 6 20004255        823    825 UK       Female           54.0 35-54     1.00
+## # ... with 674 more variables: Q2Kids_2 &lt;dbl&gt;, Q2Kids_3 &lt;dbl&gt;,
+## #   dKIDS &lt;fct&gt;, Q3 &lt;fct&gt;, dNET &lt;fct&gt;, fQ2UKRegion &lt;fct&gt;, dRegionUK &lt;fct&gt;,
+## #   fQ2FRRegion &lt;fct&gt;, dRegionFR &lt;fct&gt;, fQ2DERegion &lt;fct&gt;,
+## #   dRegionDE &lt;fct&gt;, Q2TURRegion &lt;fct&gt;, Q2IncomeUK &lt;fct&gt;, dIncomeUK &lt;fct&gt;,
+## #   Q2IncomeFR &lt;fct&gt;, dIncomeFR &lt;fct&gt;, Q2IncomeDE &lt;fct&gt;, dIncomeDE &lt;fct&gt;,
+## #   Q2IncomeTUR &lt;fct&gt;, dIncomeTUR &lt;fct&gt;, Q4_1 &lt;fct&gt;, Q4_2 &lt;fct&gt;,
+## #   Q4_3 &lt;fct&gt;, Q4_4 &lt;fct&gt;, Q4_5 &lt;fct&gt;, Q4_6 &lt;fct&gt;, Q4_99 &lt;fct&gt;,
+## #   Q6_1 &lt;fct&gt;, Q6_2 &lt;fct&gt;, Q6_3 &lt;fct&gt;, Q6_4 &lt;fct&gt;, Q6_5 &lt;fct&gt;,
+## #   Q6_98 &lt;fct&gt;, Q6_99 &lt;fct&gt;, dBiscLMAll_1 &lt;fct&gt;, dBiscLMAll_2 &lt;fct&gt;,
+## #   dBiscLMAll_3 &lt;fct&gt;, dBiscLMAll_4 &lt;fct&gt;, dBiscLMAll_5 &lt;fct&gt;,
+## #   dBiscLMAll_6 &lt;fct&gt;, dTypLMAll_1 &lt;fct&gt;, dTypLMAll_2 &lt;fct&gt;,
+## #   dTypLMAll_3 &lt;fct&gt;, dTypLMAll_4 &lt;fct&gt;, dNumber &lt;fct&gt;, fQ13_1 &lt;fct&gt;,
+## #   fQ13_2 &lt;fct&gt;, fQ13_3 &lt;fct&gt;, fQ13_4 &lt;fct&gt;, fQ13_5 &lt;fct&gt;, fQ13_6 &lt;fct&gt;,
+## #   fQ13_7 &lt;fct&gt;, fQ13_8 &lt;fct&gt;, fQ13_9 &lt;fct&gt;, fQ13_10 &lt;fct&gt;,
+## #   fQ13_11 &lt;fct&gt;, fQ13_12 &lt;fct&gt;, fQ13_13 &lt;fct&gt;, fQ13_14 &lt;fct&gt;,
+## #   fQ13_15 &lt;fct&gt;, fQ13_16 &lt;fct&gt;, fQ13_17 &lt;fct&gt;, fQ13_18 &lt;fct&gt;,
+## #   fQ13_19 &lt;fct&gt;, fQ13_20 &lt;fct&gt;, fQ13_21 &lt;fct&gt;, fQ13_22 &lt;fct&gt;,
+## #   fQ13_23 &lt;fct&gt;, fQ13_24 &lt;fct&gt;, fQ13_25 &lt;fct&gt;, fQ13_26 &lt;fct&gt;,
+## #   fQ13_27 &lt;fct&gt;, fQ13_28 &lt;fct&gt;, fQ13_29 &lt;fct&gt;, fQ13_30 &lt;fct&gt;,
+## #   fQ13_31 &lt;fct&gt;, fQ13_32 &lt;fct&gt;, fQ13_33 &lt;fct&gt;, fQ13_34 &lt;fct&gt;,
+## #   fQ13_35 &lt;fct&gt;, fQ13_36 &lt;fct&gt;, fQ13_37 &lt;fct&gt;, fQ13_38 &lt;fct&gt;,
+## #   Q25A_1 &lt;fct&gt;, Q25A_2 &lt;fct&gt;, Q25A_3 &lt;fct&gt;, Q25A_4 &lt;fct&gt;, Q25A_5 &lt;fct&gt;,
+## #   Q25A_6 &lt;fct&gt;, Q25A_7 &lt;fct&gt;, Q25A_8 &lt;fct&gt;, Q25A_9 &lt;fct&gt;, Q25A_10 &lt;fct&gt;,
+## #   Q25A_11 &lt;fct&gt;, Q25A_12 &lt;fct&gt;, Q25A_13 &lt;fct&gt;, Q25A_14 &lt;fct&gt;,
+## #   Q25A_15 &lt;fct&gt;, Q25A_16 &lt;fct&gt;, Q25A_95 &lt;fct&gt;, ...
+```
+
+---
+
+# Importing Data - SPSS
+
+Quickly get some summary stats about your respondents...
+
+
+```r
+labelled_survey_data %&gt;% 
+  count(fQ1bGender, dAge) %&gt;% 
+  spread(fQ1bGender, n) %&gt;% 
+  knitr::kable(format = "html")
+```
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; dAge &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Male &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Female &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 16-34 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 510 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 596 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 35-54 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 664 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 612 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 55+ &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 362 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 480 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+
+# Importing Data - Databases
+
+
+```r
+library(DBI)
+
+con &lt;- dbConnect(
+  drv = RMySQL::MySQL(),
+  dbname = "shinydemo",
+  host = "shiny-demo.csa7qlmguqrf.us-east-1.rds.amazonaws.com",
+  username = "guest",
+  password = "guest"
+)
+
+dbListTables(con)
+```
+
+```
+## [1] "City"            "Country"         "CountryLanguage"
+```
+
+---
+
+# Importing Data - Databases
+
+
+```r
+cities &lt;- tbl(con, "City")
+
+cities
+```
+
+```
+## # Source:   table&lt;City&gt; [?? x 5]
+## # Database: mysql 10.0.17-MariaDB
+## #   [guest@shiny-demo.csa7qlmguqrf.us-east-1.rds.amazonaws.com:/shinydemo]
+##       ID Name           CountryCode District      Population
+##    &lt;dbl&gt; &lt;chr&gt;          &lt;chr&gt;       &lt;chr&gt;              &lt;dbl&gt;
+##  1  1.00 Kabul          AFG         Kabol            1780000
+##  2  2.00 Qandahar       AFG         Qandahar          237500
+##  3  3.00 Herat          AFG         Herat             186800
+##  4  4.00 Mazar-e-Sharif AFG         Balkh             127800
+##  5  5.00 Amsterdam      NLD         Noord-Holland     731200
+##  6  6.00 Rotterdam      NLD         Zuid-Holland      593321
+##  7  7.00 Haag           NLD         Zuid-Holland      440900
+##  8  8.00 Utrecht        NLD         Utrecht           234323
+##  9  9.00 Eindhoven      NLD         Noord-Brabant     201843
+## 10 10.0  Tilburg        NLD         Noord-Brabant     193238
+## # ... with more rows
+```
+
+---
+
+# Web APIs
+
+Many R packages make it easy for you to pull publicly available data via an API (application programming interface).
+
+The code below retrieves data from the UK police database within 1 mile of the coordinates you provide for the latest available month.
+
+
+```r
+library(ukpolice)
+
+crime_data &lt;- ukp_crime(lat = 51.533802, lng = -0.092715)
+
+head(crime_data)
+```
+
+```
+## # A tibble: 6 x 12
+##   category persistent_id date    lat    long street_id street_name context
+##   &lt;chr&gt;    &lt;chr&gt;         &lt;chr&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;     &lt;chr&gt;       &lt;chr&gt;  
+## 1 anti-so~ ""            2018~  51.5 -0.114  960854    On or near~ ""     
+## 2 anti-so~ ""            2018~  51.5 -0.0826 961467    On or near~ ""     
+## 3 anti-so~ ""            2018~  51.5 -0.0826 961467    On or near~ ""     
+## 4 anti-so~ ""            2018~  51.5 -0.0820 968664    On or near~ ""     
+## 5 anti-so~ ""            2018~  51.5 -0.101  961239    On or near~ ""     
+## 6 anti-so~ ""            2018~  51.5 -0.0938 964580    On or near~ ""     
+## # ... with 4 more variables: id &lt;chr&gt;, location_type &lt;chr&gt;,
+## #   location_subtype &lt;chr&gt;, outcome_status &lt;chr&gt;
+```
+
+
+---
+
+class: inverse, middle, center
+
+# Manipulation
+
+---
+
+# Transforming Data
+
+.pull-left[
+![spread-gather](static/imgs/tidyr-spread-gather.gif) 
+]
+
+.pull-right[
+![left-join](static/imgs/left-join.gif) 
+]
+
+
+https://github.com/gadenbuie/tidy-animated-verbs
+
+---
+
+# Transforming Data
+
+
+```r
+# data set with details of every tree in paris (1 row = 1 tree)
+trees_in_paris &lt;- read_csv2("data/les-arbres.csv") 
+
+colnames(trees_in_paris) # how's your french?
+```
+
+```
+##  [1] "IDBASE"             "TYPEEMPLACEMENT"    "DOMANIALITE"       
+##  [4] "ARRONDISSEMENT"     "COMPLEMENTADRESSE"  "NUMERO"            
+##  [7] "LIEU / ADRESSE"     "IDEMPLACEMENT"      "CIRCONFERENCEENCM" 
+## [10] "HAUTEUR (m)"        "STADEDEVELOPPEMENT" "PEPINIERE"         
+## [13] "ESPECE"             "VARIETEOUCULTIVAR"  "GENRE"             
+## [16] "DATEPLANTATION"     "REMARQUABLE"        "LIBELLEFRANCAIS"   
+## [19] "OBJECTID"           "geo_point_2d"
+```
+
+Can we answer the question...
+
+&gt; How many trees does each Arrondissement have, and what century were they planted in?
+
+We only need 2 columns from the raw data to answer this...
+
+---
+
+# Transforming Data
+
+
+```r
+transformed_trees &lt;- trees_in_paris %&gt;% 
+  select(ARRONDISSEMENT, DATEPLANTATION) %&gt;%                # select only Arr. and Date Planted cols
+  mutate(year = lubridate::year(DATEPLANTATION),            # pull year number from full date
+         century_planted = case_when(                       #
+           year &lt; 1700 ~ "17th",                            #
+           year &lt; 1800 ~ "18th",                            #
+           year &lt; 1900 ~ "19th",                            # code a century planted column
+           year &lt; 2000 ~ "20th",                            # based on year number
+           year &lt; 2018 ~ "21st",                            #
+           is.na(year) ~ "Unknown"                          #
+           )                                                #
+         ) %&gt;%                                              #
+  count(ARRONDISSEMENT, century_planted) %&gt;%                # count the number of trees by Arr. &amp; Century
+  group_by(ARRONDISSEMENT) %&gt;%                              # group the data by Arr.
+  add_tally(n) %&gt;%                                          # add column with total trees for each Arr.
+  ungroup() %&gt;%                                             # ungroup the data
+  spread(century_planted, n) %&gt;%                            # spread centuries from rows to columns
+  select(1, 3:8, Total = nn) %&gt;%                            # reorder and rename columns
+  arrange(desc(Total))                                      # sort data by total column
+```
+
+---
+
+# Results...
+
+The 16th Arrondissement has the most trees in Paris! Most of which were planted in the 18th Century.
+
+
+```r
+transformed_trees
+```
+
+```
+## # A tibble: 25 x 8
+##    ARRONDISSEMENT    `17th` `18th` `19th` `20th` `21st` Unknown Total
+##    &lt;chr&gt;              &lt;int&gt;  &lt;int&gt;  &lt;int&gt;  &lt;int&gt;  &lt;int&gt;   &lt;int&gt; &lt;int&gt;
+##  1 PARIS 16E ARRDT       NA  13970     21   2154   2059    1301 19505
+##  2 PARIS 15E ARRDT       NA  11910     25   3869   2198     974 18976
+##  3 PARIS 13E ARRDT       NA  10528      1   2998   3972    1331 18830
+##  4 PARIS 20E ARRDT       NA  12309     NA   1646   2316    1004 17275
+##  5 PARIS 19E ARRDT       NA  10421     NA   1452   2353     990 15216
+##  6 PARIS 14E ARRDT       NA  10752      2   1280   1858     560 14452
+##  7 PARIS 12E ARRDT       NA   8602     17   2648   2231     672 14170
+##  8 PARIS 17E ARRDT       NA   6414      3   1984   2557    1157 12115
+##  9 SEINE-SAINT-DENIS     NA  11230     NA     NA    285     254 11769
+## 10 PARIS 18E ARRDT       NA   6116     NA   1941   2556     862 11475
+## # ... with 15 more rows
+```
+
+---
+
+# Joining Data
+
+
+```r
+co2 &lt;- read.table("ftp://aftp.cmdl.noaa.gov/products/trends/co2/co2_annmean_mlo.txt") %&gt;% 
+  as_tibble() %&gt;% 
+  select(Year = V1, CO2 = V2)
+
+temp &lt;- read.table("https://go.nasa.gov/2r8ryH1") %&gt;% 
+  as_tibble() %&gt;% 
+  select(Year = V1, `Global Land-Ocean Temperature Index` = V2)
+```
+
+.pull-left[
+
+```
+## # A tibble: 59 x 2
+##     Year   CO2
+##    &lt;int&gt; &lt;dbl&gt;
+##  1  1959   316
+##  2  1960   317
+##  3  1961   318
+##  4  1962   318
+##  5  1963   319
+##  6  1964   320
+##  7  1965   320
+##  8  1966   321
+##  9  1967   322
+## 10  1968   323
+## # ... with 49 more rows
+```
+]
+
+.pull-right[
+
+```
+## # A tibble: 138 x 2
+##     Year `Global Land-Ocean Temperature Index`
+##    &lt;int&gt;                                 &lt;dbl&gt;
+##  1  1880                                -0.190
+##  2  1881                                -0.100
+##  3  1882                                -0.100
+##  4  1883                                -0.190
+##  5  1884                                -0.280
+##  6  1885                                -0.310
+##  7  1886                                -0.320
+##  8  1887                                -0.350
+##  9  1888                                -0.180
+## 10  1889                                -0.110
+## # ... with 128 more rows
+```
+]
+
+---
+
+# Joining Data
+
+.pull-left[
+![inner-join](static/imgs/inner-join.gif) 
+]
+
+.pull-right[
+
+To look for a relationship between each dataset we want to join them but only keep years for which there is both CO2 and Global Temperature data.
+
+
+```r
+joined_data &lt;- inner_join(co2, temp, by = "Year")
+
+joined_data
+```
+
+```
+## # A tibble: 59 x 3
+##     Year   CO2 `Global Land-Ocean Temperature Index`
+##    &lt;int&gt; &lt;dbl&gt;                                 &lt;dbl&gt;
+##  1  1959   316                                0.0300
+##  2  1960   317                               -0.0200
+##  3  1961   318                                0.0600
+##  4  1962   318                                0.0400
+##  5  1963   319                                0.0700
+##  6  1964   320                               -0.200 
+##  7  1965   320                               -0.100 
+##  8  1966   321                               -0.0500
+##  9  1967   322                               -0.0200
+## 10  1968   323                               -0.0700
+## # ... with 49 more rows
+```
+]
+
+---
+
+# Plot the Relationship...
+
+
+```r
+ggplot(joined_data, aes(x = CO2, y = `Global Land-Ocean Temperature Index`)) +
+  geom_point() +
+  geom_smooth() +
+  labs(caption = "Source: NOAA, NASA")
+```
+
+&lt;img src="index_files/figure-html/unnamed-chunk-14-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+
+class: inverse, middle, center
+
+# Visualisation
+
+---
+
+# Visualisation with ggplot2
+
+--
+
+
+- Combine your data wrangling and chart making into one single process
+
+--
+
+  * no more pasting data from excel into powerpoint to make or change a chart! 🙌
+
+--
+
+- Makes it easy to quickly iterate over different ways of mapping your data to shapes, space and colour
+
+--
+
+- Programming a chart with code forces you to think about what you are doing and why
+
+--
+
+- Allows you to create completley unique charts by adding several different 'layers' of data
+
+--
+
+- Not constrained by the chart types available in other software packages
+
+--
+
+- Produce publication quality graphics just like...
+
+---
+
+# Financial Times
+
+.pull-left[
+&lt;blockquote class="twitter-tweet" data-lang="en"&gt;&lt;p lang="en" dir="ltr"&gt;Fun fact for the &lt;a href="https://twitter.com/hashtag/dataviz?src=hash&amp;amp;ref_src=twsrc%5Etfw"&gt;#dataviz&lt;/a&gt; crowd:&lt;br&gt;&lt;br&gt;This chart (and the ones in the story) are the first we&amp;#39;ve done 100% in ggplot, right down to the custom &lt;a href="https://twitter.com/FT?ref_src=twsrc%5Etfw"&gt;@FT&lt;/a&gt; font and the white bar in the top left. &lt;a href="https://t.co/BVFmoYX2WL"&gt;https://t.co/BVFmoYX2WL&lt;/a&gt;&lt;/p&gt;&amp;mdash; John Burn-Murdoch (@jburnmurdoch) &lt;a href="https://twitter.com/jburnmurdoch/status/1006783615022391297?ref_src=twsrc%5Etfw"&gt;June 13, 2018&lt;/a&gt;&lt;/blockquote&gt;
+&lt;script async src="https://platform.twitter.com/widgets.js" charset="utf-8"&gt;&lt;/script&gt;
+]
+
+
+.pull-right[
+&lt;img src="static/imgs/ft_ggplot.jpg" width="100%"/&gt;
+]
+
+---
+
+# BBC
+
+&lt;blockquote class="twitter-tweet" data-conversation="none" data-cards="hidden" data-lang="en"&gt;&lt;p lang="en" dir="ltr"&gt;At the beeb we’re now doing a lot of charts solely in ggplot. The charts here for example &lt;a href="https://t.co/bokQHQK6pj"&gt;https://t.co/bokQHQK6pj&lt;/a&gt; .  We’re doing maps too.&lt;/p&gt;&amp;mdash; Wesley Stephenson (@WesStephenson) &lt;a href="https://twitter.com/WesStephenson/status/1006797669648470016?ref_src=twsrc%5Etfw"&gt;June 13, 2018&lt;/a&gt;&lt;/blockquote&gt;
+&lt;script async src="https://platform.twitter.com/widgets.js" charset="utf-8"&gt;&lt;/script&gt;
+
+.center[
+&lt;img src="static/imgs/bbc_ggplot.png" width="55%"/&gt;
+]
+
+---
+
+# Visualisation with ggplot2 - Example
+
+
+```r
+london_crime &lt;- london_crime %&gt;% # use london crime data previously imported
+  gather(year, rate, 3:ncol(.))  # gather the year columns to key + value columns (wide to long data)
+
+london_crime
+```
+
+```
+## # A tibble: 544 x 4
+##    Code      Borough              year     rate
+##    &lt;chr&gt;     &lt;chr&gt;                &lt;chr&gt;   &lt;dbl&gt;
+##  1 E09000002 Barking and Dagenham 1999-00  19.8
+##  2 E09000003 Barnet               1999-00  13.5
+##  3 E09000004 Bexley               1999-00  14.5
+##  4 E09000005 Brent                1999-00  20.8
+##  5 E09000006 Bromley              1999-00  10.9
+##  6 E09000007 Camden               1999-00  28.1
+##  7 E09000008 Croydon              1999-00  17.7
+##  8 E09000009 Ealing               1999-00  22.0
+##  9 E09000010 Enfield              1999-00  14.8
+## 10 E09000011 Greenwich            1999-00  29.4
+## # ... with 534 more rows
+```
+---
+
+# Visualisation with ggplot2 - Example
+
+
+```r
+plot_years &lt;- unique(london_crime$year)
+p &lt;- ggplot(london_crime, aes(year, rate, group = Borough)) +
+  geom_line(colour = "SteelBlue") +
+  scale_x_discrete(breaks = plot_years[seq(1, length(plot_years), by = 2)]) +
+  labs(x = "Year", y = "Rate per Thousand Population", title = "Violent Crime Trends by London Boroughs",
+       caption = "Source: data.gov.uk")
+p
+```
+
+&lt;img src="index_files/figure-html/london_facet-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Facets!
+
+.left-column[
+
+```r
+p + 
+  facet_wrap(~ Borough) + 
+  scale_x_discrete(breaks = NULL) +
+  scale_y_continuous(breaks = c(10, 30, 50)) +
+  labs(x = NULL, subtitle = "1999-00 - 2015-16") +
+  theme(strip.text.x = element_text(size = 6))
+```
+]
+
+.right-column[
+&lt;img src="index_files/figure-html/london_facet2_out-1.svg" style="display: block; margin: auto;" /&gt;
+]
+
+---
+
+# Geo Facets!!!
+
+.left-column[
+
+Switch `facet_wrap` to `facet_geo` with the `geofacet` package to arrange facets in a geographically ordered grid.
+
+
+```r
+library(geofacet)
+p +
+  facet_geo(~ Borough, grid = "london_boroughs_grid") +
+  scale_x_discrete(breaks = NULL) +
+  scale_y_continuous(breaks = c(10, 30, 50)) +
+  labs(x = NULL, subtitle = "1999-00 - 2015-16") +
+  theme(strip.text.x = element_text(size = 6))
+```
+]
+
+.right-column[
+&lt;img src="index_files/figure-html/london_facet3_out-1.svg" style="display: block; margin: auto;" /&gt;
+]
+
+---
+
+# Joy Plots!!!!!!
+
+
+```r
+library(ggridges)
+
+ggplot(london_crime, aes(x = rate, y = factor(year) %&gt;% fct_rev(), fill = ..x..)) +
+  geom_density_ridges_gradient(scale = 3, rel_min_height = 0.01, colour = "white") +
+  viridis::scale_fill_viridis(name = "Rate", option = "C") +
+  labs(y = NULL, title = 'Distribution of Violent Crime Rate in London Boroughs',
+       subtitle = "Rate per Thousand Population", caption = "Source: London Data Store") +
+  theme_ft_rc()
+```
+
+---
+
+# Joy Plots!!!!!!
+
+&lt;img src="index_files/figure-html/jpy-plot-out-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Maps
+
+
+```r
+library(sf)
+
+# join london borough shapefile to data and filter to latest year
+ldn_shape &lt;- st_read("data/ldnb/London_Borough_Excluding_MHW.shp", quiet = TRUE) %&gt;%
+  st_transform(4326) %&gt;% 
+  inner_join(london_crime, by = c("GSS_CODE" = "Code")) %&gt;% 
+  filter(year == "2015-16")
+
+ldn_map &lt;- ggplot(ldn_shape) +
+  geom_sf(aes(fill = rate), colour = "#FAFAFA") +
+  coord_sf(datum = NA) +
+  scale_fill_viridis_c(name = "Rate per Thousand Population", 
+                       guide = guide_colourbar(title.position = "top",
+                                               barwidth = 13, 
+                                               barheight = 0.5)) +
+  theme(legend.position = c(0.8, 1.05), legend.direction = "horizontal") +
+  labs(title = "Violent Crime in London", subtitle = "2015-16", caption = "Source: London Data Store")
+```
+
+---
+
+# Maps
+
+&lt;img src="index_files/figure-html/unnamed-chunk-17-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Interactive Graphics
+
+As well as static graphics with `ggplot2`, [`htmlwidgets`](https://www.htmlwidgets.org/) bring the best of JavaScript data visualisation to R.
+
+A few lines of R code can produce rich interactive charts and maps that you can embed in reports and dashboards.
+
+For example, Plotly allows you to convert a static ggplot to an interactive graphics with one line!
+
+
+```r
+# make the same london crime ggplot as before with added html tooltip aesthetic
+# then convert to plotly js chart
+library(plotly)
+library(glue)
+
+p &lt;- ggplot(london_crime, aes(year, rate, group = Borough, 
+                              text = glue("&lt;b&gt;{Borough}&lt;/b&gt;&lt;br&gt;Year: {year}&lt;br&gt;Rate: {round(rate, 2)}"))) +
+  geom_line(colour = "SteelBlue") +
+  scale_x_discrete(breaks = plot_years[seq(1, length(plot_years), by = 2)]) +
+  labs(x = "Year", y = "Rate per Thousand Population", title = "Violent Crime Trends by London Boroughs")
+
+p_i &lt;- ggplotly(p, tooltip = "text")
+```
+
+Chart on the next slide!
+
+---
+
+# ggplot2 -&gt; Ploty JS
+
+
+
+&lt;iframe src="plotly_example.html" width=100% height=550 frameborder="no"&gt;&lt;/iframe&gt;
+
+---
+
+# Highcharts
+
+
+```r
+library(highcharter)
+library(treemap) 
+data(GNI2014) # world gross national income data
+
+# 2-tiered treemap with one line of code
+treemap &lt;- hctreemap2(GNI2014, c("continent", "iso3"), size_var = "population", color_var = "GNI")
+```
+
+
+
+&lt;iframe src="hc_example.html" width=100% height=400 frameborder="no"&gt;&lt;/iframe&gt;
+
+---
+
+# Leaflet
+
+We can use the previously merged london borough shapefile and violent crime data to make an interactive leaflet map like so...
+
+
+```r
+library(leaflet)
+
+pal &lt;- colorNumeric("viridis", NULL)
+
+ldn_map_i &lt;- leaflet(ldn_shape) %&gt;% 
+  addProviderTiles("CartoDB.Positron") %&gt;%
+  addPolygons(
+    fill = ~rate, fillColor = ~pal(rate), fillOpacity = .6,
+    label = ~glue("&lt;b&gt;{Borough}&lt;/b&gt;&lt;br&gt;Year: {year}&lt;br&gt;Rate: {round(rate, 2)}") %&gt;% lapply(htmltools::HTML), 
+    stroke = TRUE, color = "#FAFAFA", weight = 1, smoothFactor = 0
+  ) %&gt;% 
+  addLegend(pal = pal, values = ~rate, opacity = 1.0, title = "Crime&lt;br&gt;Rate")
+```
+
+---
+
+# Leaflet
+
+
+
+&lt;iframe src="leaflet_example.html" width=100% height=550 frameborder="no"&gt;&lt;/iframe&gt;
+
+---
+
+class: inverse, middle, center
+
+# Communication
+
+---
+
+# Communication
+
+.pull-left[
+
+All your coding is only going to be useful if you can effectively communicate the findings to non-coders, in formats they are comfortable with.
+
+This is where R really excels above other programming languages:
+
+- [`rmarkdown`](https://rmarkdown.rstudio.com/) is an authoring format that enables the easy creation of dynamic documents, presentations, and reports from R. It combines the core syntax of markdown (an easy to write plain text format) with embedded R code chunks that are run so their output can be included in the final document
+
+- [`Shiny`](https://shiny.rstudio.com/) makes it possible to build fully interactive web-apps and dashboards that puts the analytical and graphical power of R at the fingertips of your users in elegant, browser-based user interfaces
+
+]
+
+.pull-right[
+![rmarkdown](static/imgs/rmarkdown.png)
+
+![shiny](static/imgs/shiny.png)
+]
+
+---
+
+# Rmarkdown
+
+Combining narrative and commentary with code in a single document is a very powerful concept. It makes your report fully **reproducible**. That is, a script you can simply re-run whenever your data or code changes and all data-driven R outputs will update automatically in your report. No more copy &amp; pasting data around various MS Office programs!
+
+[Check out this video](https://www.youtube.com/watch?v=s3JldKoA0zw) for a better illustration of the problem and solution to traditional data reporting methods.
+
+The output options enables you to share your analysis in the format your audience is most comfortable with, be it:
+
+- HTML Report (enables the use of interactive graphics)
+- HTML Slideshow (this entire slideshow is written in rmarkdown!)
+- PDF Report
+- MS Word Document
+- MS PowerPoint Slides
+- Dashboards
+- Websites - [cultureofinsight.com](https://cultureofinsight.com) is written in rmarkdown
+
+Having your report as an executable R script also allows you to paramaterise some variables and automate the generation of several different reports - one for each subset of a data set, for example.
+
+---
+
+# Rmarkdown
+
+&lt;img src="http://r4ds.had.co.nz/rmarkdown/diamond-sizes-report.png" alt="rmarkdown-screenshot" width="70%"/&gt;
+
+.center[
+Example of the code and output of an html rmarkdown report
+]
+
+---
+
+# Shiny
+
+Shiny goes a step further and allows end-users to interact with a live R session through a user-interface, giving them the power of R without any required knowledge of coding.
+
+Shiny dashboards are significantly more powerful than expensive off-the-shelf dashboard software that are limited to visualising the data you supply to them with their own charting libraries. Shiny can draw on the vast eco-system of open-source technology, dynamically run any type of R code you want it to, and feed the results back to the end-user. 
+
+#### Example Use Case
+
+- fetch some live google analytics data
+- merge it with some internal market research data
+- run a model to calculate whether a recent marketing campaign drove a significant increase in web traffic
+- visualise the results to the user in interactive charts
+- give them the option of downloading an auto-generated rmarkdown PDF report
+
+And there's no limitations on the look and feel of your app. There's lots of great CSS themes to choose from, or if you know some HTML + CSS you can build a complety bespoke user interace interface from the ground-up.
+
+Check out some of the shiny apps we've made over on the Culture of Insight [portfolio page.](https://cultureofinsight.com/portfolio)
+
+---
+
+# Shiny
+
+&lt;img src="static/imgs/shiny_example.png" alt="shiny-screenshot" width="70%"/&gt;
+
+.center[
+Example of the code and output of basic shiny app
+]
+
+---
+
+class: inverse, middle, center
+
+# Learning
+
+---
+
+# Learning
+
+We hope this has inspired you to start learning some R!
+
+We're currently offering a 1-day "Introduction to R" course to get people started on their journey to data programming nirvana.
+
+The course will teach you how to import, collate, join, and transform datasets with the tidyverse packages in the RStudio IDE. 
+
+This will provide the base knowledge you need to:
+
+- Liberate you from the constraints of Excel
+- Elimate human error in your work by automating your data tasks with R scripts
+- Free-up time to focus on insight, not data wrangling
+
+You can extend your training to focus on topics like:
+
+- Data visualisation with `ggplot2`
+- Automated reporting with `rmarkdown`
+- Web-application development with `shiny`
+
+Head over to our [eventbrite page](https://www.eventbrite.co.uk/e/master-data-with-code-tickets-50351709318) to sign up, or [get in touch here](https://cultureofinsight.com/contact) if you'd like to know more!
+
+---
+
+class: inverse, middle, center, contact-links
+
+# Thank you!
+
+[cultureofinsight.com](https://cultureofinsight.com/)
+
+twitter: [@paulcampbell91](https:/twitter.com/paulcampbell91)
+
+github: [paulc91](https://github.com/PaulC91)
+
+linkedin: [paul campbell](https://www.linkedin.com/in/paul-campbell-792425123/)
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightStyle": "zenburn",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
+
+<script>
+(function() {
+  var i, text, code, codes = document.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+})();
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

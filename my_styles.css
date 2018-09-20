@@ -1,0 +1,18 @@
+.left-column {
+  width: 40%;
+  padding-top: 0;
+}
+
+.right-column {
+  width: 60%;
+  padding-top: 0;
+}
+
+img {
+  display: block;
+  margin: auto;
+}
+
+.contact-links a {
+  color: #fff;
+}
