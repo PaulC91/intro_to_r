@@ -14,8 +14,6 @@ output:
       countIncrementalSlides: false
 ---
 
-<base target="_blank">
-
 ```{r setup, include=FALSE, cache=FALSE}
 options(htmltools.dir.version = FALSE)
 
@@ -45,6 +43,8 @@ theme_set(
 class: inverse, middle, center
 
 # Why R?
+
+<base target="_blank">
 
 ---
 
