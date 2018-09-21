@@ -20,6 +20,8 @@ class: center, middle, inverse, title-slide
 ---
 
 
+&lt;base target="_blank"&gt;
+
 
 
 class: inverse, middle, center
@@ -121,7 +123,7 @@ class: inverse, middle, center
 
 .pull-left[
 
-R can import data in just about every form imaginable:
+R can import data from just about every form imaginable:
 
 - Flat files like plain text and delimited data: .txt, .csv, .tsv
 
@@ -134,7 +136,7 @@ R can import data in just about every form imaginable:
 ]
 
 .pull-right[
-![r data imports](http://www.sthda.com/sthda/RDoc/images/importing-data-into-r.png)
+![r data imports](static/imgs/import-r.png)
 ]
 
 ---
@@ -681,36 +683,26 @@ class: inverse, middle, center
 
 ---
 
-# Visualisation with ggplot2
+# ggplot2
 
---
-
-
+.pull-left[
 - Combine your data wrangling and chart making into one single process
-
---
-
   * no more pasting data from excel into powerpoint to make or change a chart! 🙌
-
---
 
 - Makes it easy to quickly iterate over different ways of mapping your data to shapes, space and colour
 
---
-
 - Programming a chart with code forces you to think about what you are doing and why
-
---
 
 - Allows you to create completley unique charts by adding several different 'layers' of data
 
---
-
 - Not constrained by the chart types available in other software packages
 
---
-
 - Produce publication quality graphics just like...
+]
+
+.pull-right[
+&lt;img src="https://d33wubrfki0l68.cloudfront.net/0ab849ed51b0b866ef6895c253d3899f4926d397/dbf0f/images/hex-ggplot2.png" alt="ggplot2 hex" width="60%" /&gt;
+]
 
 ---
 
@@ -739,7 +731,7 @@ class: inverse, middle, center
 
 ---
 
-# Visualisation with ggplot2 - Example
+# ggplot2 - Example
 
 
 ```r
@@ -767,7 +759,7 @@ london_crime
 ```
 ---
 
-# Visualisation with ggplot2 - Example
+# ggplot2 - Example
 
 
 ```r
@@ -784,7 +776,7 @@ p
 
 ---
 
-# Facets!
+# Facets
 
 .left-column[
 
@@ -804,7 +796,7 @@ p +
 
 ---
 
-# Geo Facets!!!
+# Geo Facets
 
 .left-column[
 
@@ -828,7 +820,7 @@ p +
 
 ---
 
-# Joy Plots!!!!!!
+# Joy Plots
 
 
 ```r
@@ -844,7 +836,7 @@ ggplot(london_crime, aes(x = rate, y = factor(year) %&gt;% fct_rev(), fill = ..x
 
 ---
 
-# Joy Plots!!!!!!
+# Joy Plots
 
 &lt;img src="index_files/figure-html/jpy-plot-out-1.svg" style="display: block; margin: auto;" /&gt;
 
@@ -917,24 +909,6 @@ Chart on the next slide!
 
 ---
 
-# Highcharts
-
-
-```r
-library(highcharter)
-library(treemap) 
-data(GNI2014) # world gross national income data
-
-# 2-tiered treemap with one line of code
-treemap &lt;- hctreemap2(GNI2014, c("continent", "iso3"), size_var = "population", color_var = "GNI")
-```
-
-
-
-&lt;iframe src="hc_example.html" width=100% height=400 frameborder="no"&gt;&lt;/iframe&gt;
-
----
-
 # Leaflet
 
 We can use the previously merged london borough shapefile and violent crime data to make an interactive leaflet map like so...
@@ -965,6 +939,24 @@ ldn_map_i &lt;- leaflet(ldn_shape) %&gt;%
 
 ---
 
+# Highcharts
+
+
+```r
+library(highcharter)
+library(treemap) 
+data(GNI2014) # world gross national income data
+
+# 2-tiered treemap with one line of code
+treemap &lt;- hctreemap2(GNI2014, c("continent", "iso3"), size_var = "population", color_var = "GNI")
+```
+
+
+
+&lt;iframe src="hc_example.html" width=100% height=400 frameborder="no"&gt;&lt;/iframe&gt;
+
+---
+
 class: inverse, middle, center
 
 # Communication
@@ -975,7 +967,7 @@ class: inverse, middle, center
 
 .pull-left[
 
-All your coding is only going to be useful if you can effectively communicate the findings to non-coders, in formats they are comfortable with.
+All your coding is only going to be useful if you can effectively communicate the findings to a broader audience of stakeholders, in formats they are comfortable with.
 
 This is where R really excels above other programming languages:
 
@@ -995,9 +987,7 @@ This is where R really excels above other programming languages:
 
 # Rmarkdown
 
-Combining narrative and commentary with code in a single document is a very powerful concept. It makes your report fully **reproducible**. That is, a script you can simply re-run whenever your data or code changes and all data-driven R outputs will update automatically in your report. No more copy &amp; pasting data around various MS Office programs!
-
-[Check out this video](https://www.youtube.com/watch?v=s3JldKoA0zw) for a better illustration of the problem and solution to traditional data reporting methods.
+Combining narrative and commentary with code in a single document is a very powerful concept. It makes your report fully **reproducible**. That is, a script you can simply re-run whenever your data or code changes and all data-driven R outputs will update automatically in your report. No more copy &amp; pasting data around various MS Office programs!*
 
 The output options enables you to share your analysis in the format your audience is most comfortable with, be it:
 
@@ -1010,6 +1000,10 @@ The output options enables you to share your analysis in the format your audienc
 - Websites - [cultureofinsight.com](https://cultureofinsight.com) is written in rmarkdown
 
 Having your report as an executable R script also allows you to paramaterise some variables and automate the generation of several different reports - one for each subset of a data set, for example.
+
+.footnote[
+*[Check out this video](https://www.youtube.com/watch?v=s3JldKoA0zw) for a better illustration of the problem and solution to traditional data reporting methods.
+]
 
 ---
 
@@ -1079,7 +1073,7 @@ You can extend your training to focus on topics like:
 - Automated reporting with `rmarkdown`
 - Web-application development with `shiny`
 
-Head over to our [eventbrite page](https://www.eventbrite.co.uk/e/master-data-with-code-tickets-50351709318) to sign up, or [get in touch here](https://cultureofinsight.com/contact) if you'd like to know more!
+Head over to our [eventbrite page](https://www.eventbrite.co.uk/e/master-data-with-code-tickets-50351709318) to sign up, or [get in touch here](https://cultureofinsight.com/training) if you'd like to know more!
 
 ---
 

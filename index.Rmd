@@ -14,6 +14,8 @@ output:
       countIncrementalSlides: false
 ---
 
+<base target="_blank">
+
 ```{r setup, include=FALSE, cache=FALSE}
 options(htmltools.dir.version = FALSE)
 
@@ -30,7 +32,7 @@ knitr::opts_chunk$set(
 
 library(tidyverse)
 library(hrbrthemes)
-library(widgetframe)
+library(glue)
 
 theme_set(
   theme_minimal(base_family = "Fira Code") + 
@@ -139,7 +141,7 @@ class: inverse, middle, center
 
 .pull-left[
 
-R can import data in just about every form imaginable:
+R can import data from just about every form imaginable:
 
 - Flat files like plain text and delimited data: .txt, .csv, .tsv
 
@@ -152,7 +154,7 @@ R can import data in just about every form imaginable:
 ]
 
 .pull-right[
-![r data imports](http://www.sthda.com/sthda/RDoc/images/importing-data-into-r.png)
+![r data imports](static/imgs/import-r.png)
 ]
 
 ---
@@ -423,36 +425,26 @@ class: inverse, middle, center
 
 ---
 
-# Visualisation with ggplot2
+# ggplot2
 
---
-
-
+.pull-left[
 - Combine your data wrangling and chart making into one single process
-
---
-
   * no more pasting data from excel into powerpoint to make or change a chart! `r emo::ji("raised_hands")`
-
---
 
 - Makes it easy to quickly iterate over different ways of mapping your data to shapes, space and colour
 
---
-
 - Programming a chart with code forces you to think about what you are doing and why
-
---
 
 - Allows you to create completley unique charts by adding several different 'layers' of data
 
---
-
 - Not constrained by the chart types available in other software packages
 
---
-
 - Produce publication quality graphics just like...
+]
+
+.pull-right[
+<img src="https://d33wubrfki0l68.cloudfront.net/0ab849ed51b0b866ef6895c253d3899f4926d397/dbf0f/images/hex-ggplot2.png" alt="ggplot2 hex" width="60%" />
+]
 
 ---
 
@@ -481,7 +473,7 @@ class: inverse, middle, center
 
 ---
 
-# Visualisation with ggplot2 - Example
+# ggplot2 - Example
 
 ```{r}
 london_crime <- london_crime %>% # use london crime data previously imported
@@ -491,7 +483,7 @@ london_crime
 ```
 ---
 
-# Visualisation with ggplot2 - Example
+# ggplot2 - Example
 
 ```{r london_facet, fig.height=4, fig.width=8}
 plot_years <- unique(london_crime$year)
@@ -505,7 +497,7 @@ p
 
 ---
 
-# Facets!
+# Facets
 
 .left-column[
 ```{r london_facet2, eval=FALSE}
@@ -525,7 +517,7 @@ p +
 
 ---
 
-# Geo Facets!!!
+# Geo Facets
 
 .left-column[
 
@@ -549,7 +541,7 @@ p +
 
 ---
 
-# Joy Plots!!!!!!
+# Joy Plots
 
 ```{r joy-plot, eval=FALSE}
 library(ggridges)
@@ -564,7 +556,7 @@ ggplot(london_crime, aes(x = rate, y = factor(year) %>% fct_rev(), fill = ..x..)
 
 ---
 
-# Joy Plots!!!!!!
+# Joy Plots
 
 ```{r jpy-plot-out, echo=FALSE, fig.height=6, fig.width=10, ref.label="joy-plot"}
 ```
@@ -643,6 +635,38 @@ htmlwidgets::saveWidget(p_i, file = "plotly_example.html", libdir = "libs",
 
 ---
 
+# Leaflet
+
+We can use the previously merged london borough shapefile and violent crime data to make an interactive leaflet map like so...
+
+```{r cache=FALSE}
+library(leaflet)
+
+pal <- colorNumeric("viridis", NULL)
+
+ldn_map_i <- leaflet(ldn_shape) %>% 
+  addProviderTiles("CartoDB.Positron") %>%
+  addPolygons(
+    fill = ~rate, fillColor = ~pal(rate), fillOpacity = .6,
+    label = ~glue("<b>{Borough}</b><br>Year: {year}<br>Rate: {round(rate, 2)}") %>% lapply(htmltools::HTML), 
+    stroke = TRUE, color = "#FAFAFA", weight = 1, smoothFactor = 0
+  ) %>% 
+  addLegend(pal = pal, values = ~rate, opacity = 1.0, title = "Crime<br>Rate")
+```
+
+---
+
+# Leaflet
+
+```{r echo=FALSE, cache=FALSE}
+htmlwidgets::saveWidget(ldn_map_i, file = "leaflet_example.html", libdir = "libs", 
+                        selfcontained = FALSE, background = "#FAFAFA")
+```
+
+<iframe src="leaflet_example.html" width=100% height=550 frameborder="no"></iframe>
+
+---
+
 # Highcharts
 
 ```{r}
@@ -663,38 +687,6 @@ htmlwidgets::saveWidget(treemap, file = "hc_example.html", libdir = "libs",
 
 ---
 
-# Leaflet
-
-We can use the previously merged london borough shapefile and violent crime data to make an interactive leaflet map like so...
-
-```{r}
-library(leaflet)
-
-pal <- colorNumeric("viridis", NULL)
-
-ldn_map_i <- leaflet(ldn_shape) %>% 
-  addProviderTiles("CartoDB.Positron") %>%
-  addPolygons(
-    fill = ~rate, fillColor = ~pal(rate), fillOpacity = .6,
-    label = ~glue("<b>{Borough}</b><br>Year: {year}<br>Rate: {round(rate, 2)}") %>% lapply(htmltools::HTML), 
-    stroke = TRUE, color = "#FAFAFA", weight = 1, smoothFactor = 0
-  ) %>% 
-  addLegend(pal = pal, values = ~rate, opacity = 1.0, title = "Crime<br>Rate")
-```
-
----
-
-# Leaflet
-
-```{r echo=FALSE}
-htmlwidgets::saveWidget(ldn_map_i, file = "leaflet_example.html", libdir = "libs", 
-                        selfcontained = FALSE, background = "#FAFAFA")
-```
-
-<iframe src="leaflet_example.html" width=100% height=550 frameborder="no"></iframe>
-
----
-
 class: inverse, middle, center
 
 # Communication
@@ -705,7 +697,7 @@ class: inverse, middle, center
 
 .pull-left[
 
-All your coding is only going to be useful if you can effectively communicate the findings to non-coders, in formats they are comfortable with.
+All your coding is only going to be useful if you can effectively communicate the findings to a broader audience of stakeholders, in formats they are comfortable with.
 
 This is where R really excels above other programming languages:
 
@@ -725,9 +717,7 @@ This is where R really excels above other programming languages:
 
 # Rmarkdown
 
-Combining narrative and commentary with code in a single document is a very powerful concept. It makes your report fully **reproducible**. That is, a script you can simply re-run whenever your data or code changes and all data-driven R outputs will update automatically in your report. No more copy & pasting data around various MS Office programs!
-
-[Check out this video](https://www.youtube.com/watch?v=s3JldKoA0zw) for a better illustration of the problem and solution to traditional data reporting methods.
+Combining narrative and commentary with code in a single document is a very powerful concept. It makes your report fully **reproducible**. That is, a script you can simply re-run whenever your data or code changes and all data-driven R outputs will update automatically in your report. No more copy & pasting data around various MS Office programs!*
 
 The output options enables you to share your analysis in the format your audience is most comfortable with, be it:
 
@@ -740,6 +730,10 @@ The output options enables you to share your analysis in the format your audienc
 - Websites - [cultureofinsight.com](https://cultureofinsight.com) is written in rmarkdown
 
 Having your report as an executable R script also allows you to paramaterise some variables and automate the generation of several different reports - one for each subset of a data set, for example.
+
+.footnote[
+*[Check out this video](https://www.youtube.com/watch?v=s3JldKoA0zw) for a better illustration of the problem and solution to traditional data reporting methods.
+]
 
 ---
 
@@ -809,7 +803,7 @@ You can extend your training to focus on topics like:
 - Automated reporting with `rmarkdown`
 - Web-application development with `shiny`
 
-Head over to our [eventbrite page](https://www.eventbrite.co.uk/e/master-data-with-code-tickets-50351709318) to sign up, or [get in touch here](https://cultureofinsight.com/contact) if you'd like to know more!
+Head over to our [eventbrite page](https://www.eventbrite.co.uk/e/master-data-with-code-tickets-50351709318) to sign up, or [get in touch here](https://cultureofinsight.com/training) if you'd like to know more!
 
 ---
 

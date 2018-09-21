@@ -720,10 +720,18 @@ _htmlwidgets2.default.widget({
           methods.fitBounds.apply(map, data.fitBounds);
         }
         if (data.flyTo) {
+          if (!explicitView && !map.leafletr.hasRendered) {
+            // must be done to give a initial starting point
+            map.fitWorld();
+          }
           explicitView = true;
           map.flyTo.apply(map, data.flyTo);
         }
         if (data.flyToBounds) {
+          if (!explicitView && !map.leafletr.hasRendered) {
+            // must be done to give a initial starting point
+            map.fitWorld();
+          }
           explicitView = true;
           methods.flyToBounds.apply(map, data.flyToBounds);
         }
@@ -1279,10 +1287,18 @@ function mouseHandler(mapId, layerId, group, eventName, extraInfo) {
   return function (e) {
     if (!_htmlwidgets2.default.shinyMode) return;
 
+    var latLng = e.target.getLatLng ? e.target.getLatLng() : e.latlng;
+    if (latLng) {
+      // retrieve only lat, lon values to remove prototype
+      //   and extra parameters added by 3rd party modules
+      // these objects are for json serialization, not javascript
+      var latLngVal = _leaflet2.default.latLng(latLng); // make sure it has consistent shape
+      latLng = { lat: latLngVal.lat, lng: latLngVal.lng };
+    }
     var eventInfo = _jquery2.default.extend({
       id: layerId,
       ".nonce": Math.random() // force reactivity
-    }, group !== null ? { group: group } : null, e.target.getLatLng ? e.target.getLatLng() : e.latlng, extraInfo);
+    }, group !== null ? { group: group } : null, latLng, extraInfo);
 
     _shiny2.default.onInputChange(mapId + "_" + eventName, eventInfo);
   };
