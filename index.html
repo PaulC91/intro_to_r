@@ -185,7 +185,7 @@ london_crime # preview the data
 .pull-left[
 
 ```r
-library(readxl)
+library(readxl) # for reading excel files
 
 path &lt;- "data/gapminder_messy.xlsx"
 
@@ -386,7 +386,7 @@ labelled_survey_data %&gt;%
 
 
 ```r
-library(DBI)
+library(DBI) # for connecting to databases
 
 con &lt;- dbConnect(
   drv = RMySQL::MySQL(),
@@ -443,7 +443,7 @@ The code below retrieves data from the UK police database within 1 mile of the c
 
 
 ```r
-library(ukpolice)
+library(ukpolice) # R wrapper to the UK Police API
 
 crime_data &lt;- ukp_crime(lat = 51.533802, lng = -0.092715)
 
@@ -804,7 +804,7 @@ Switch `facet_wrap` to `facet_geo` with the `geofacet` package to arrange facets
 
 
 ```r
-library(geofacet)
+library(geofacet) # for geographically arranged facets
 p +
   facet_geo(~ Borough, grid = "london_boroughs_grid") +
   scale_x_discrete(breaks = NULL) +
@@ -824,7 +824,7 @@ p +
 
 
 ```r
-library(ggridges)
+library(ggridges) # for creating ridgeline plots of 'joy plots' a la joy division unknown pleasures
 
 ggplot(london_crime, aes(x = rate, y = factor(year) %&gt;% fct_rev(), fill = ..x..)) +
   geom_density_ridges_gradient(scale = 3, rel_min_height = 0.01, colour = "white") +
@@ -846,7 +846,7 @@ ggplot(london_crime, aes(x = rate, y = factor(year) %&gt;% fct_rev(), fill = ..x
 
 
 ```r
-library(sf)
+library(sf) # for spatial analysis in a 'tidy' framework
 
 # join london borough shapefile to data and filter to latest year
 ldn_shape &lt;- st_read("data/ldnb/London_Borough_Excluding_MHW.shp", quiet = TRUE) %&gt;%
@@ -884,9 +884,8 @@ For example, Plotly allows you to convert a static ggplot to an interactive grap
 
 ```r
 # make the same london crime ggplot as before with added html tooltip aesthetic
-# then convert to plotly js chart
-library(plotly)
-library(glue)
+library(plotly) # R package for the plotly javascript library
+library(glue) # for glueing strings to data
 
 p &lt;- ggplot(london_crime, aes(year, rate, group = Borough, 
                               text = glue("&lt;b&gt;{Borough}&lt;/b&gt;&lt;br&gt;Year: {year}&lt;br&gt;Rate: {round(rate, 2)}"))) +
@@ -894,7 +893,7 @@ p &lt;- ggplot(london_crime, aes(year, rate, group = Borough,
   scale_x_discrete(breaks = plot_years[seq(1, length(plot_years), by = 2)]) +
   labs(x = "Year", y = "Rate per Thousand Population", title = "Violent Crime Trends by London Boroughs")
 
-p_i &lt;- ggplotly(p, tooltip = "text")
+p_i &lt;- ggplotly(p, tooltip = "text") # then convert to plotly js chart
 ```
 
 Chart on the next slide!
@@ -915,7 +914,7 @@ We can use the previously merged london borough shapefile and violent crime data
 
 
 ```r
-library(leaflet)
+library(leaflet) # for interactive mapping
 
 pal &lt;- colorNumeric("viridis", NULL)
 
@@ -943,8 +942,8 @@ ldn_map_i &lt;- leaflet(ldn_shape) %&gt;%
 
 
 ```r
-library(highcharter)
-library(treemap) 
+library(highcharter) # R package for the highcharts javascript library
+library(treemap) # to load GNI data below
 data(GNI2014) # world gross national income data
 
 # 2-tiered treemap with one line of code
